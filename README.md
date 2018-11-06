@@ -17,7 +17,7 @@ The configuration file is in /opt/nginx/conf/
 
 To run the container and bind the port 1935 to the host machine; run the following:
 ```
-docker run -p 1935:1935 -p 8080:8080 jasonrivers/nginx-rtmp
+docker run -p 1935:1935 -p 8080:8080 -e SECRET=mysupersecret jasonrivers/nginx-rtmp
 ```
 
 ### Multiple Streams:
@@ -27,6 +27,7 @@ docker run      \
     -p 1935:1935        \
     -p 8080:8080        \
     -e RTMP_STREAM_NAMES=live,teststream1,teststream2   \
+    -e SECRET=mysupersecret \
     jasonrivers/nginx-rtmp
 ```
 
@@ -45,15 +46,16 @@ Under broadcast settigns, set the follwing parameters:
 ```
 Streaming Service: Custom
 Server: rtmp://<your server ip>/live
-Play Path/Stream Key: mystream
+Play Path/Stream Key: mystream?psk=mysupersecret
 ```
 
 ## Watching the steam
 
 In your favorite RTMP video player connect to the stream using the URL:
-rtmp://&lt;your server ip&gt;/live/mystream
-http://&lt;your server ip&gt;/hls/mystream.m3u8
+rtmp://<your server ip>/live/mystream
+http://<your server ip>/hls/mystream.m3u8
 
 ## Tested players
  * VLC
  * omxplayer (Raspberry Pi)
+ * videojs
