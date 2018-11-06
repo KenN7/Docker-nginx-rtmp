@@ -1,7 +1,7 @@
 # Docker-nginx-rtmp
 Docker image for an RTMP/HLS server running on nginx
 
-NGINX Version 1.13.9
+NGINX Version 1.15.3
 nginx-rtmp-module Version 1.2.1
 
 ## Configurations
