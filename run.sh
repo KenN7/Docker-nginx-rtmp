@@ -7,6 +7,7 @@ RTMP_CONNECTIONS=${RTMP_CONNECTIONS-1024}
 RTMP_STREAM_NAMES=${RTMP_STREAM_NAMES-live,testing}
 RTMP_STREAMS=$(echo ${RTMP_STREAM_NAMES} | sed "s/,/\n/g")
 RTMP_PUSH_URLS=$(echo ${RTMP_PUSH_URLS} | sed "s/,/\n/g")
+SECRET=${SECRET}
 
 apply_config() {
 
@@ -44,7 +45,10 @@ http {
         }
 
         location /on_publish {
-            return  201;
+          if ($arg_psk = ${SECRET}) {
+            return 201;
+          }
+          return 404;
         }
         location /stat {
             rtmp_stat all;
