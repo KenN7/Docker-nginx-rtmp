@@ -17,7 +17,7 @@ The configuration file is in /opt/nginx/conf/
 
 To run the container and bind the port 1935 to the host machine; run the following:
 ```
-docker run -p 1935:1935 -p 8080:8080 -e SECRET=mysupersecret jasonrivers/nginx-rtmp
+docker run -p 1935:1935 -p 8080:8080 -e SECRET=mysupersecret kennes/docker-nginx-rtmp
 ```
 
 ### Multiple Streams:
