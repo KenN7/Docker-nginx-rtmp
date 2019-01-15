@@ -23,7 +23,6 @@ RUN	apk update		&&	\
 		libstdc++		\
 		ca-certificates		\
 		libssh2			\
-		curl			\
 		expat			\
 		pcre			\
 		musl-dev		\
@@ -32,8 +31,7 @@ RUN	apk update		&&	\
 		zlib-dev		\
 		openssl-dev		\
 		curl			\
-		make
-
+		make            
 
 RUN	cd /tmp/									&&	\
 	curl --remote-name http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz			&&	\
@@ -55,12 +53,14 @@ RUN apk update		&& \
 		openssl		   \
 		libstdc++	   \
 		ca-certificates	   \
-		pcre
+		pcre           \
+        python3
 
 COPY --from=0 /opt/nginx /opt/nginx
 COPY --from=0 /tmp/nginx-rtmp-module/stat.xsl /opt/nginx/conf/stat.xsl
 RUN rm /opt/nginx/conf/nginx.conf
 ADD run.sh /
+ADD authserv.py /
 
 EXPOSE 1935
 EXPOSE 8080

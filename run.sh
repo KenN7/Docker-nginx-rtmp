@@ -44,12 +44,6 @@ http {
             add_header  Access-Control-Allow-Origin *;
         }
 
-        location /on_publish {
-          if (\$arg_psk = ${SECRET}) {
-            return 201;
-          }
-          return 404;
-        }
         location /stat {
             rtmp_stat all;
             rtmp_stat_stylesheet stat.xsl;
@@ -95,7 +89,7 @@ cat >>${NGINX_CONFIG_FILE} <<!EOF
         application ${STREAM_NAME} {
             live on;
             record off;
-            on_publish http://localhost:8080/on_publish;
+            on_publish http://localhost:8888/;
 !EOF
 if [ "${HLS}" = "true" ]; then
 cat >>${NGINX_CONFIG_FILE} <<!EOF
@@ -131,6 +125,9 @@ if ! [ -f ${NGINX_CONFIG_FILE} ]; then
 else
     echo "CONFIG EXISTS - Not creating!"
 fi
+
+echo "Starting auth server"
+/usr/bin/python3 authserv.py &> pyauth.log &
 
 echo "Starting server..."
 /opt/nginx/sbin/nginx -g "daemon off;"
