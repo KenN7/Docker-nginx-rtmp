@@ -45,7 +45,7 @@ http {
         }
 
         location /on_publish {
-          if ($arg_psk = ${SECRET}) {
+          if (\$arg_psk = ${SECRET}) {
             return 201;
           }
           return 404;
