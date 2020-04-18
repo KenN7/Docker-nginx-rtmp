@@ -1,9 +1,7 @@
 FROM alpine:latest as builder
-MAINTAINER Jason Rivers <docker@jasonrivers.co.uk>
 
 ARG NGINX_VERSION=1.15.3
 ARG NGINX_RTMP_VERSION=1.2.1
-
 
 RUN	apk update		&&	\
 	apk add				\
@@ -47,23 +45,25 @@ RUN	cd /tmp										&&	\
 	make										&&	\
 	make install
 
+# FROM alpine:latest
 FROM alpine:latest
-RUN apk update		&& \
-	apk add			   \
-		openssl		   \
-		libstdc++	   \
-		ca-certificates	   \
-		pcre           \
-        python3
+RUN apk update && apk add \
+        python3 \
+		openssl \
+		libstdc++ \
+		ca-certificates \
+		pcre \
+    && rm -rf /var/cache/apk/*
 
-COPY --from=0 /opt/nginx /opt/nginx
-COPY --from=0 /tmp/nginx-rtmp-module/stat.xsl /opt/nginx/conf/stat.xsl
+COPY --from=builder /opt/nginx /opt/nginx
+COPY --from=builder /tmp/nginx-rtmp-module/stat.xsl /opt/nginx/conf/stat.xsl
+COPY player.html /html/player.html
 RUN rm /opt/nginx/conf/nginx.conf
-ADD run.sh /
-ADD authserv.py /
+ADD run.sh /run/run.sh
+ADD authserv.py /run/authserv.py
 
 EXPOSE 1935
-EXPOSE 8080
+EXPOSE 80
 
-CMD /run.sh
+CMD /run/run.sh
 

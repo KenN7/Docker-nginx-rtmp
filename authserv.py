@@ -1,5 +1,4 @@
 #/usr/bin/python3
-
 from http.server import *
 import os
 import re
@@ -7,12 +6,11 @@ import re
 class S(BaseHTTPRequestHandler):
     def do_POST(self):
         l = int(self.headers['content-length'])
-        req = str(self.rfile.read(l))
+        req = self.rfile.read(l).decode('utf-8')
         try:
-            print(re.search("psk=(.+)",req).group(1)[:-1])
-            print('found psk')
-            if os.environ['SECRET'] == re.search("psk=(.+)",req).group(1)[:-1]:
-                print('match..')
+            passwd = re.search("psk=(.+)",req)
+            if os.environ['SECRET'] == passwd.group(1):
+                # print('match..')
                 self.send_response(201)
                 self.end_headers()
             else:
@@ -29,4 +27,4 @@ def run(server_class=HTTPServer, handler_class=S, port=8888):
     httpd.serve_forever()
 
 if __name__ == "__main__":
-   run() 
+    run() 

@@ -1,7 +1,5 @@
 #!/bin/sh
-
 NGINX_CONFIG_FILE=/opt/nginx/conf/nginx.conf
-
 
 RTMP_CONNECTIONS=${RTMP_CONNECTIONS-1024}
 RTMP_STREAM_NAMES=${RTMP_STREAM_NAMES-live,testing}
@@ -31,8 +29,17 @@ http {
     keepalive_timeout   65;
 
     server {
-        listen          8080;
+        listen          80;
         server_name     localhost;
+ 
+        location / {
+            return 301 /player;
+        }
+
+        location /player {
+            alias /html/;
+            index player.html;
+        }
 
         location /hls {
             types {
@@ -127,7 +134,7 @@ else
 fi
 
 echo "Starting auth server"
-/usr/bin/python3 authserv.py &> pyauth.log &
+/usr/bin/python3 /run/authserv.py &
 
 echo "Starting server..."
 /opt/nginx/sbin/nginx -g "daemon off;"

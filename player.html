@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>VideoJS HTTP Streaming</title>
+
+    <!-- Bootstrap core CSS. This is just to make the demo look
+    nice. It's not required for videojs-http-streaming to work. -->
+    <link href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Some custom styles for the demo page -->
+    <style>
+      body {
+        padding-top: 50px;
+        color: #868688;
+        background-color: #FAFCFF;
+      }
+      nav {
+        background-color: #e7e7e7
+      }
+      nav a {
+        color: #868688;
+      }
+      nav a:hover {
+        color: #606062;
+        text-decoration: none;
+      }
+      .navbar-toggle .icon-bar {
+        background-color: #868688;
+      }
+      .starter-template {
+        padding: 40px 15px;
+        text-align: center;
+      }
+      .video-js {
+        margin: 0 auto;
+      }
+      input {
+        margin-top: 15px;
+        min-width: 450px;
+        padding: 5px;
+      }
+    </style>
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+
+      <section class="starter-template">
+        <h1>Streaming Player</h1>
+        <video-js autoplay id="example-video" class="vjs-default-skin" width=960 height=400 controls>
+          <source
+            src="https://psoc.ig11.ananas.space/hls/stream.m3u8"
+            type="application/x-mpegURL">
+        </video-js>
+
+        <form id=load-url>
+          <div>
+            <label>
+              Video URL:
+              <input id=url type=url value="https://psoc.ig11.ananas.space/hls/stream.m3u8">
+            </label>
+          </div>
+
+          <div>
+            <label>
+              MimeType:
+              <select id=mimetype>
+                <option selected>application/x-mpegURL</option>
+                <option>application/dash+xml</option>
+              </select>
+            </label>
+          </div>
+
+          <div>
+            <button type=submit>Load</button>
+          </div>
+        </form>
+
+      </section>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap stuff. These three scripts aren't necessary for you
+         to use videojs-http-streaming -->
+    <script src="https://unpkg.com/jquery@1.11.2/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/video.js/dist/video.js"></script>
+    <script src="https://unpkg.com/@videojs/http-streaming/dist/videojs-http-streaming.js"></script>
+
+    <script>
+      (function(window, videojs) {
+        var player = window.player = videojs('example-video');
+
+        // hook up the video switcher
+        var loadUrl = document.getElementById('load-url');
+        var url = document.getElementById('url');
+        var mimeType = document.getElementById('mimetype');
+        loadUrl.addEventListener('submit', function(event) {
+          event.preventDefault();
+          player.src({
+            src: url.value,
+            type: mimeType.options[mimeType.selectedIndex].innerText
+          });
+          return false;
+        });
+      }(window, window.videojs));
+    </script>
+  </body>
+</html>
+
